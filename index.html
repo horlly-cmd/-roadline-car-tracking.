@@ -1,112 +1,83 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Roadline — Vehicle Dispatch Tracker</title>
-<style>
-:root{--navy:#101b2d;--blue:#2563eb;--pale:#f3f6fb;--muted:#68758a;--green:#12805c}
-*{box-sizing:border-box}body{margin:0;background:var(--pale);color:#172338;font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{background:var(--navy);color:white;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.brand{font-weight:850;letter-spacing:.13em;font-size:19px}.brand span{color:#7fb0ff}.tag{font-size:12px;color:#c6d2e5}
-main{max-width:980px;margin:28px auto;padding:0 16px}.hero{background:white;border:1px solid #e1e7f0;border-radius:18px;padding:24px;box-shadow:0 10px 30px #15284a0b}
-.eyebrow{font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--blue)}h1{font-size:clamp(25px,5vw,36px);line-height:1.15;margin:8px 0 6px}p{margin:6px 0;color:var(--muted)}
-.lookup{display:flex;gap:10px;margin-top:20px}.lookup input{flex:1;min-width:0;padding:13px 14px;border:1px solid #cfd8e6;border-radius:10px;font:inherit}.lookup button,.btn{border:0;border-radius:10px;padding:13px 18px;background:var(--blue);color:white;font-weight:750;cursor:pointer}
-.notice{font-size:12px;margin-top:13px;color:#778398}
-.results{display:none;margin-top:18px;gap:18px}.card{background:white;border:1px solid #e1e7f0;border-radius:16px;padding:20px;box-shadow:0 8px 24px #15284a08}
-.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #edf0f5}.row:last-child{border:0}.label{color:var(--muted);font-size:13px}.value{text-align:right;font-weight:700}.pill{display:inline-flex;align-items:center;gap:7px;background:#e8f7f0;color:var(--green);padding:6px 10px;border-radius:99px;font-size:12px;font-weight:800}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
-.map{height:255px;border-radius:13px;overflow:hidden;position:relative;background:#e9eff7;border:1px solid #dce4ef}
-.map svg{width:100%;height:100%;display:block}.map-label{position:absolute;left:12px;top:12px;background:#fff;padding:7px 10px;border-radius:8px;font-size:11px;font-weight:800;box-shadow:0 2px 8px #0001}
-.distance{font-size:35px;letter-spacing:-.04em;font-weight:850;margin:6px 0}.small{font-size:12px;color:var(--muted)}.bar{height:7px;background:#e8edf5;border-radius:9px;overflow:hidden;margin:13px 0}.bar div{height:100%;width:62%;background:var(--blue);transition:width .5s}
-.timeline{display:grid;grid-template-columns:18px 1fr;gap:10px;margin-top:18px}.rail{display:flex;flex-direction:column;align-items:center}.rail i{width:11px;height:11px;border-radius:50%;border:3px solid var(--blue);background:white}.rail b{width:2px;flex:1;min-height:28px;background:#d8e2f2}.event{padding-bottom:16px}.event strong{font-size:13px}.event p{font-size:12px}
-.admin{margin-top:22px;background:#fff9e9;border:1px dashed #d8b55e;border-radius:14px;padding:18px}.admin h2{font-size:16px;margin:0 0 4px}.admin .hint{font-size:12px;color:#78683f}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.controls label{font-size:12px;font-weight:750;color:#586477}.controls input,.controls select{display:block;width:100%;padding:10px;margin-top:5px;border:1px solid #d5dce7;border-radius:8px;font:inherit;background:white}.controls .wide{grid-column:1/-1}.controls button{grid-column:1/-1}.admin-status{font-size:12px;margin-top:8px;color:#66572f}
-footer{text-align:center;padding:28px 16px;color:#8490a2;font-size:11px}
-@media(max-width:680px){header{padding:16px}.grid{grid-template-columns:1fr}.hero{padding:19px}.lookup{flex-direction:column}.lookup button{width:100%}.controls{grid-template-columns:1fr}.controls .wide{grid-column:auto}.distance{font-size:32px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roadline | Vehicle Delivery Tracking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><div><div class="brand">ROAD<span>LINE</span></div><div class="tag">VEHICLE LOGISTICS & DISPATCH</div></div><div class="tag">TRACKING PORTAL</div></header>
-<main>
-<section class="hero">
-<div class="eyebrow">VEHICLE TRACKING PORTAL</div>
-<h1>Track your vehicle</h1>
-<p>Enter the reference number provided by your dispatch contact to view the latest shipment details.</p>
-<form class="lookup" id="lookup"><input id="trackInput" autocomplete="off" placeholder="Enter tracking ID" aria-label="Tracking ID" value="RL-4829-TX"><button>Track vehicle →</button></form>
-<div class="notice">Demo tracking portal created for a private surprise. Status and map position are manually simulated.</div>
-</section>
-<section class="results" id="results">
-<div class="grid">
-<div class="card">
-<div class="eyebrow">SHIPMENT OVERVIEW</div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin:10px 0 15px;flex-wrap:wrap"><h2 style="margin:0;font-size:21px">Vehicle delivery</h2><span class="pill"><i class="dot"></i><span id="statusPill">In transit</span></span></div>
-<div class="row"><span class="label">Tracking ID</span><span class="value" id="idValue">RL-4829-TX</span></div>
-<div class="row"><span class="label">Vehicle</span><span class="value" id="carValue">Lexus ES 350</span></div>
-<div class="row"><span class="label">Current dispatch location</span><span class="value" id="locationValue">Austin, TX</span></div>
-<div class="row"><span class="label">Destination</span><span class="value">San Antonio, TX</span></div>
-<div class="row"><span class="label">Estimated arrival</span><span class="value" id="etaValue">Pending update</span></div>
-<div style="margin-top:17px"><div class="label">Route progress</div><div class="bar"><div id="progressBar"></div></div><div class="small" id="progressText">Shipment progress updated by dispatch</div></div>
-</div>
-<div class="card">
-<div class="eyebrow">DISTANCE TO DESTINATION</div><div class="distance"><span id="distanceValue">79</span> mi</div><p id="distanceCaption">Approximate remaining distance</p>
-<div class="map" style="margin-top:17px">
-<div class="map-label">SIMULATED ROUTE VIEW</div>
-<svg viewBox="0 0 400 260" role="img" aria-label="Illustrative route map, not live GPS">
-<rect width="400" height="260" fill="#eaf0f7"/>
-<g stroke="#fff" stroke-width="10" fill="none" opacity=".95"><path d="M-20 40 L420 220"/><path d="M-20 210 L420 70"/><path d="M80 -20 L150 280"/><path d="M280 -20 L240 280"/><path d="M-20 130 L420 140"/></g>
-<g stroke="#d3deeb" stroke-width="2" fill="none"><path d="M-20 40 L420 220"/><path d="M-20 210 L420 70"/><path d="M80 -20 L150 280"/><path d="M280 -20 L240 280"/><path d="M-20 130 L420 140"/></g>
-<path id="routeBg" d="M72 55 C115 82 160 125 210 142 S290 183 328 204" fill="none" stroke="#b9c7dc" stroke-width="8" stroke-linecap="round"/>
-<path id="routeLine" d="M72 55 C115 82 160 125 210 142 S290 183 328 204" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-dasharray="5 7"/>
-<circle cx="328" cy="204" r="11" fill="#12805c" stroke="white" stroke-width="4"/><text x="294" y="230" font-size="11" font-weight="700" fill="#172338">SAN ANTONIO</text>
-<g id="carMarker" transform="translate(160 117)"><circle r="13" fill="#2563eb" stroke="white" stroke-width="4"/><text y="4" text-anchor="middle" font-size="10">🚗</text></g>
-<text x="46" y="39" font-size="11" font-weight="700" fill="#172338" id="mapLoc">AUSTIN AREA</text>
-</svg></div><div class="small" style="margin-top:8px">Illustrative route only · not live GPS</div>
-</div>
-</div>
-<div class="card">
-<div class="eyebrow">SHIPMENT ACTIVITY</div>
-<div class="timeline"><div class="rail"><i></i><b></b><i></i><b></b><i></i></div><div><div class="event"><strong>Dispatch reference created</strong><p>Vehicle shipment details recorded.</p></div><div class="event"><strong id="eventTitle">Vehicle in transit</strong><p id="eventText">Dispatch status awaiting next update.</p></div><div class="event"><strong>Delivery destination</strong><p>San Antonio, Texas</p></div></div></div>
-</div>
-</section>
-<section class="admin" id="admin">
-<h2>Dispatch controls</h2><div class="hint">Organizer-only controls for this demo. Changes update the tracking display on this device. A public link won't sync these edits to another phone without hosting a shared backend.</div>
-<div class="controls">
-<label>Tracking ID<input id="adminId" value="RL-4829-TX"></label>
-<label>Vehicle description<input id="adminCar" value="Lexus ES 350"></label>
-<label>Displayed location<input id="adminLoc" value="Austin, TX"></label>
-<label>Distance remaining (miles)<input id="adminDist" type="number" min="0" max="3000" value="79"></label>
-<label>Delivery status<select id="adminStatus"><option>In transit</option><option>Preparing for dispatch</option><option>Out for delivery</option><option>Arriving soon</option><option>Delivered</option><option>Delivery delayed</option></select></label>
-<label>Estimated arrival<input id="adminEta" value="Today, pending confirmation"></label>
-<label class="wide">Latest activity note<input id="adminNote" value="Vehicle is progressing toward the destination."></label>
-<label class="wide">Route progress (%)<input id="adminProgress" type="range" min="0" max="100" value="62"></label>
-<button class="btn" id="updateBtn" type="button">Update tracking display</button>
-</div><div class="admin-status" id="adminStatusMsg">Ready to update. Keep this page open while editing.</div>
-</section>
-</main>
-<footer>ROADLINE DEMO PORTAL · Illustrative tracking for a private surprise · No real shipment or GPS connection</footer>
-<script>
-const $=id=>document.getElementById(id);
-function applyUpdate(){
- const id=$('adminId').value.trim()||'RL-4829-TX';
- const car=$('adminCar').value.trim()||'Vehicle shipment';
- const loc=$('adminLoc').value.trim()||'En route';
- const dist=Math.max(0,Math.min(3000,Number($('adminDist').value)||0));
- const status=$('adminStatus').value, eta=$('adminEta').value.trim()||'Pending update';
- const note=$('adminNote').value.trim()||'Shipment status updated.';
- const progress=Math.max(0,Math.min(100,Number($('adminProgress').value)||0));
- $('idValue').textContent=id;$('carValue').textContent=car;$('locationValue').textContent=loc;
- $('distanceValue').textContent=dist.toLocaleString();$('statusPill').textContent=status;
- $('etaValue').textContent=eta;$('progressBar').style.width=progress+'%';
- $('progressText').textContent=progress+'% route progress (simulated)';
- $('eventTitle').textContent=status;$('eventText').textContent=note;
- $('mapLoc').textContent=loc.toUpperCase().slice(0,24);
- // Move illustrative marker along the curved route as progress changes.
- const t=progress/100, x=72+256*t, y=55+149*t+(-22*Math.sin(Math.PI*t));
- $('carMarker').setAttribute('transform',`translate(${x} ${y})`);
- $('adminStatusMsg').textContent='Display updated. This change is local to this browser.';
- $('trackInput').value=id;
-}
-$('lookup').addEventListener('submit',e=>{e.preventDefault();const typed=$('trackInput').value.trim().toUpperCase();const saved=$('adminId').value.trim().toUpperCase();if(typed===saved||typed==='RL-4829-TX'){$('results').style.display='grid';applyUpdate();}else{alert('Tracking reference not found. Please check the ID and try again.');}});
-$('updateBtn').addEventListener('click',()=>{applyUpdate();$('results').style.display='grid';});
-$('results').style.display='grid';applyUpdate();
-</script>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">R</span><span>ROADLINE<small>VEHICLE LOGISTICS</small></span></a>
+    <div class="top-right"><span class="secure-dot"></span> Shipment portal <span class="divider"></span><span class="help">Need help?</span></div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">VEHICLE DELIVERY</p>
+        <h1>Track your delivery<span>.</span></h1>
+        <p class="subhead">Your vehicle’s journey, all in one place.</p>
+      </div>
+      <div class="tracking-chip"><span>TRACKING NUMBER</span><strong>RL-4829-TX</strong></div>
+    </section>
+
+    <section class="status-card">
+      <div class="status-head">
+        <div><span class="label">CURRENT STATUS</span><div class="status-line"><span class="pulse"></span><strong id="statusText">In transit</strong></div></div>
+        <div class="updated">LAST UPDATE <strong id="updatedText">Today, 9:42 AM CT</strong></div>
+      </div>
+      <div class="progress"><span id="progressFill"></span></div>
+      <div class="progress-labels"><span>Order confirmed</span><span>In transit</span><span>Delivered</span></div>
+    </section>
+
+    <div class="grid">
+      <section class="panel route-panel">
+        <div class="panel-heading"><div><p class="eyebrow">ROUTE OVERVIEW</p><h2>Your vehicle is on its way</h2></div><span class="live-tag"><i></i> ROUTE STATUS</span></div>
+        <div class="map">
+          <div class="map-grid"></div>
+          <svg class="route-svg" viewBox="0 0 700 310" preserveAspectRatio="none" aria-label="Illustrative route from Austin to San Antonio">
+            <path class="road" d="M85 65 L180 105 L255 82 L340 145 L430 130 L515 195 L625 230"/>
+            <path class="route-shadow" d="M85 65 L180 105 L255 82 L340 145 L430 130 L515 195 L625 230"/>
+            <path class="route" d="M85 65 L180 105 L255 82 L340 145 L430 130 L515 195 L625 230"/>
+          </svg>
+          <div class="city austin"><span class="pin"></span><b>Austin</b><small>ORIGIN</small></div>
+          <div class="city sanantonio"><span class="pin destination"></span><b>San Antonio</b><small>DESTINATION</small></div>
+          <div class="car-marker">↗</div>
+          <div class="map-note">ROUTE OVERVIEW · ILLUSTRATIVE</div>
+        </div>
+        <div class="route-cities"><div><span class="city-dot"></span><div><small>ORIGIN</small><strong>Austin, TX</strong></div></div><div class="route-dash"></div><div><span class="city-dot end"></span><div><small>DESTINATION</small><strong>San Antonio, TX</strong></div></div></div>
+      </section>
+
+      <section class="panel eta-panel">
+        <p class="eyebrow">DELIVERY ESTIMATE</p>
+        <h2 id="eta">Arrival estimate</h2>
+        <p class="eta-copy">Your delivery is progressing toward its destination.</p>
+        <div class="metric"><span>Distance remaining</span><strong id="distance">79 <small>mi</small></strong></div>
+        <div class="metric"><span>Vehicle condition</span><strong>In transit</strong></div>
+        <div class="metric"><span>Delivery location</span><strong>San Antonio, TX</strong></div>
+        <div class="eta-foot"><span class="truck-icon">↗</span><span>Delivery updates are provided by the dispatch team.</span></div>
+      </section>
+    </div>
+
+    <section class="panel vehicle-panel">
+      <div class="vehicle-copy"><p class="eyebrow">YOUR VEHICLE</p><h2>2020 Lexus ES 350</h2><p class="muted">Premium sedan · Vehicle delivery</p><div class="vehicle-tags"><span>LEXUS</span><span>ES SERIES</span><span>SEDAN</span></div></div>
+      <div class="vehicle-visual"><div class="vehicle-glow"></div><div class="car-silhouette">LEXUS</div><small>VEHICLE PROFILE</small></div>
+    </section>
+
+    <section class="panel timeline-panel">
+      <div class="panel-heading"><div><p class="eyebrow">SHIPMENT ACTIVITY</p><h2>Delivery timeline</h2></div><span class="activity-count">2 UPDATES</span></div>
+      <div class="timeline">
+        <div class="timeline-item complete"><span class="timeline-icon">✓</span><div><strong>Shipment processed</strong><p>Vehicle details and delivery information confirmed.</p></div><time>Completed</time></div>
+        <div class="timeline-item current"><span class="timeline-icon">↗</span><div><strong>Vehicle in transit</strong><p>Your vehicle is progressing along the delivery route.</p></div><time>In progress</time></div>
+        <div class="timeline-item"><span class="timeline-icon">⌂</span><div><strong>Delivery completed</strong><p>Final delivery confirmation will appear here.</p></div><time>Pending</time></div>
+      </div>
+    </section>
+    <footer><span>ROADLINE <b>·</b> VEHICLE LOGISTICS</span><span>Private delivery preview · Route and status are illustrative, not live GPS data.</span></footer>
+  </main>
+  <script src="script.js"></script>
 </body>
 </html>
